@@ -103,6 +103,34 @@ df = load_data()
 # Title
 st.markdown("<h1>💳 Digital Payment Platforms Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='color: #A0A3BD; margin-top: -1rem;'>User Perception Analysis</h3>", unsafe_allow_html=True)
+
+# Survey Description
+st.markdown("""
+<div style='background: rgba(30, 30, 47, 0.7); backdrop-filter: blur(10px); 
+            border: 1px solid rgba(108, 92, 231, 0.3); border-radius: 16px; 
+            padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 8px 32px rgba(108, 92, 231, 0.1);'>
+    <h4 style='color: #6C5CE7; margin-top: 0;'>📋 About This Survey</h4>
+    <p style='color: #E8E9ED; line-height: 1.8; margin-bottom: 0.8rem;'>
+        This comprehensive survey examines user perceptions of leading digital payment platforms in Pakistan, 
+        including <b>Easypaisa</b>, <b>JazzCash</b>, and <b>NayaPay</b>. Conducted with <b>68 respondents</b>, 
+        the study captures critical insights into user satisfaction, trust levels, security perceptions, 
+        and platform preferences.
+    </p>
+    <h4 style='color: #00B8D4; margin-top: 1rem;'>🎯 Key Research Objectives</h4>
+    <ul style='color: #E8E9ED; line-height: 1.8;'>
+        <li><b>User Satisfaction:</b> Assess overall satisfaction levels with current digital payment solutions</li>
+        <li><b>Security Trust:</b> Evaluate user confidence in data protection and transaction security</li>
+        <li><b>Platform Comparison:</b> Compare ease of use, reliability, and innovation across platforms</li>
+        <li><b>Market Insights:</b> Identify gaps and opportunities for platform improvements</li>
+    </ul>
+    <h4 style='color: #00E676; margin-top: 1rem;'>💡 Impact & Significance</h4>
+    <p style='color: #E8E9ED; line-height: 1.8; margin-bottom: 0;'>
+        These insights drive strategic decisions for digital payment providers, helping them enhance user experience, 
+        build trust, and adapt to evolving consumer expectations in Pakistan's rapidly growing fintech ecosystem.
+    </p>
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown("<br>", unsafe_allow_html=True)
 
 # Filters
@@ -134,6 +162,8 @@ with col4:
     daily = len(filtered_df[filtered_df['Usage_Frequency'] == 'Daily'])
     st.metric("Daily Users", daily)
 
+st.markdown("<br>", unsafe_allow_html=True)
+
 # Charts
 col1, col2 = st.columns(2)
 
@@ -154,6 +184,16 @@ with col1:
         yaxis=dict(showgrid=True, gridcolor='rgba(108, 92, 231, 0.1)')
     )
     st.plotly_chart(fig1, use_container_width=True)
+    st.markdown(f"""
+    <div style='background: rgba(108, 92, 231, 0.1); border-left: 3px solid #6C5CE7; 
+                padding: 0.8rem; border-radius: 8px; margin-top: -1rem;'>
+        <p style='color: #E8E9ED; font-size: 0.9rem; margin: 0;'>
+            <b>Insight:</b> {wallet_counts.index[0]} dominates with {wallet_counts.values[0]} users 
+            ({wallet_counts.values[0]/wallet_counts.sum()*100:.1f}%), indicating strong market leadership. 
+            This suggests high brand trust and user retention in the primary platform.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col2:
     # Satisfaction Levels
@@ -169,6 +209,17 @@ with col2:
         font=dict(color='#E8E9ED', size=14)
     )
     st.plotly_chart(fig2, use_container_width=True)
+    satisfied_pct = (len(filtered_df[filtered_df['Satisfaction'].isin(['Satisfied', 'Very satisfied'])])/len(filtered_df)*100)
+    st.markdown(f"""
+    <div style='background: rgba(108, 92, 231, 0.1); border-left: 3px solid #6C5CE7; 
+                padding: 0.8rem; border-radius: 8px; margin-top: -1rem;'>
+        <p style='color: #E8E9ED; font-size: 0.9rem; margin: 0;'>
+            <b>Insight:</b> {satisfied_pct:.1f}% users report positive satisfaction (Satisfied/Very satisfied), 
+            reflecting good platform performance. However, addressing the {100-satisfied_pct:.1f}% neutral/dissatisfied 
+            segment presents growth opportunities.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 
@@ -189,6 +240,17 @@ with col1:
         yaxis=dict(showgrid=True, gridcolor='rgba(108, 92, 231, 0.1)')
     )
     st.plotly_chart(fig3, use_container_width=True)
+    daily_pct = (len(filtered_df[filtered_df['Usage_Frequency'] == 'Daily'])/len(filtered_df)*100)
+    st.markdown(f"""
+    <div style='background: rgba(0, 184, 212, 0.1); border-left: 3px solid #00B8D4; 
+                padding: 0.8rem; border-radius: 8px; margin-top: -1rem;'>
+        <p style='color: #E8E9ED; font-size: 0.9rem; margin: 0;'>
+            <b>Insight:</b> {daily_pct:.1f}% users engage daily, demonstrating strong platform stickiness 
+            and integration into daily financial activities. Higher frequency correlates with increased 
+            platform dependency and loyalty.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col2:
     # Most Trusted Security
@@ -207,6 +269,16 @@ with col2:
         yaxis=dict(showgrid=False)
     )
     st.plotly_chart(fig4, use_container_width=True)
+    st.markdown(f"""
+    <div style='background: rgba(0, 184, 212, 0.1); border-left: 3px solid #00B8D4; 
+                padding: 0.8rem; border-radius: 8px; margin-top: -1rem;'>
+        <p style='color: #E8E9ED; font-size: 0.9rem; margin: 0;'>
+            <b>Insight:</b> {trust_counts.index[0]} leads in security trust with {trust_counts.values[0]} votes. 
+            Security perception is critical for user retention—platforms must continuously strengthen 
+            encryption, fraud detection, and transparency.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Ease of Use
 st.markdown("### ⚡ Ease of Use by Platform")
@@ -224,6 +296,17 @@ fig5.update_layout(
     legend=dict(bgcolor='rgba(30, 30, 47, 0.7)')
 )
 st.plotly_chart(fig5, use_container_width=True)
+easy_users = len(filtered_df[filtered_df['Ease_of_Use'].isin(['Easy to use', 'Very easy to use'])])
+st.markdown(f"""
+<div style='background: rgba(0, 230, 118, 0.1); border-left: 3px solid #00E676; 
+            padding: 0.8rem; border-radius: 8px; margin-top: -1rem;'>
+    <p style='color: #E8E9ED; font-size: 0.9rem; margin: 0;'>
+        <b>Insight:</b> {easy_users/len(filtered_df)*100:.1f}% users find their platform easy to use. 
+        User-friendly interfaces directly impact adoption rates—platforms with intuitive design see 
+        higher engagement and lower churn rates across demographics.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # PayPal Preference
 col1, col2 = st.columns(2)
@@ -239,6 +322,20 @@ with col1:
         font=dict(color='#E8E9ED', size=14)
     )
     st.plotly_chart(fig6, use_container_width=True)
+    if 'Yes' in paypal_counts.index:
+        paypal_yes_pct = (paypal_counts['Yes']/paypal_counts.sum()*100)
+    else:
+        paypal_yes_pct = 0
+    st.markdown(f"""
+    <div style='background: rgba(253, 121, 168, 0.1); border-left: 3px solid #FD79A8; 
+                padding: 0.8rem; border-radius: 8px; margin-top: -1rem;'>
+        <p style='color: #E8E9ED; font-size: 0.9rem; margin: 0;'>
+            <b>Insight:</b> {paypal_yes_pct:.1f}% express interest in PayPal, signaling demand for 
+            international payment solutions. Local platforms should consider cross-border features 
+            and global integration to capture this market segment.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col2:
     st.markdown("### 👍 Would Recommend?")
@@ -252,6 +349,55 @@ with col2:
         font=dict(color='#E8E9ED', size=14)
     )
     st.plotly_chart(fig7, use_container_width=True)
+    recommend_positive = len(filtered_df[filtered_df['Would_Recommend'].isin(['Yes', 'Definitely'])])
+    st.markdown(f"""
+    <div style='background: rgba(253, 121, 168, 0.1); border-left: 3px solid #FD79A8; 
+                padding: 0.8rem; border-radius: 8px; margin-top: -1rem;'>
+        <p style='color: #E8E9ED; font-size: 0.9rem; margin: 0;'>
+            <b>Insight:</b> {recommend_positive/len(filtered_df)*100:.1f}% would recommend their platform, 
+            indicating strong Net Promoter Score (NPS). High recommendation rates drive organic growth 
+            through word-of-mouth marketing and community trust.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Key Takeaways Section
+st.markdown("""
+<div style='background: linear-gradient(135deg, rgba(108, 92, 231, 0.2) 0%, rgba(0, 184, 212, 0.2) 100%); 
+            border: 2px solid rgba(108, 92, 231, 0.4); border-radius: 16px; 
+            padding: 2rem; margin: 2rem 0;'>
+    <h3 style='color: #6C5CE7; margin-top: 0;'>🎯 Key Takeaways & Strategic Insights</h3>
+    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;'>
+        <div>
+            <h4 style='color: #00B8D4;'>✅ Strengths Identified</h4>
+            <ul style='color: #E8E9ED; line-height: 2;'>
+                <li><b>High Satisfaction:</b> Strong positive sentiment among majority users</li>
+                <li><b>Daily Engagement:</b> Significant portion uses platforms daily</li>
+                <li><b>Trust Foundation:</b> Users exhibit confidence in leading platforms</li>
+                <li><b>Usability Success:</b> Most platforms rated easy to use</li>
+            </ul>
+        </div>
+        <div>
+            <h4 style='color: #FFD600;'>⚠️ Growth Opportunities</h4>
+            <ul style='color: #E8E9ED; line-height: 2;'>
+                <li><b>International Features:</b> Address PayPal preference with global payment options</li>
+                <li><b>Security Transparency:</b> Enhance communication about data protection measures</li>
+                <li><b>User Education:</b> Improve onboarding for occasional users</li>
+                <li><b>Feature Parity:</b> Adopt best practices from international platforms</li>
+            </ul>
+        </div>
+    </div>
+    <h4 style='color: #00E676; margin-top: 1.5rem;'>🚀 Recommendations for Stakeholders</h4>
+    <p style='color: #E8E9ED; line-height: 1.8; margin-bottom: 0;'>
+        <b>For Platform Providers:</b> Prioritize security certifications, expand merchant networks, 
+        and invest in AI-driven fraud detection. <b>For Policymakers:</b> Establish digital payment 
+        standards and consumer protection frameworks. <b>For Users:</b> Leverage platform features 
+        for bill payments, transfers, and cashless transactions to maximize convenience.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("<hr style='border: 1px solid rgba(108, 92, 231, 0.2); margin: 2rem 0;'>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #A0A3BD; font-size: 0.9rem;'><b>Data Source:</b> User Perception of Digital Payment Platforms Survey | <b>Total Responses:</b> {} | <b>Powered by Plotly</b></p>".format(len(df)), unsafe_allow_html=True)
